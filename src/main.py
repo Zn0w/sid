@@ -3,6 +3,8 @@ import os
 import webbrowser
 import requests
 from datetime import datetime
+from gtts import gTTS
+import playsound
 
 import command as c
 
@@ -34,6 +36,12 @@ def process_speech(processor, input_device):
 	
 	return result
 
+def speak(text):
+	speech = gTTS(text = text, lang = "en")
+	speech.save("temp/speech.mp3")
+	playsound.playsound("temp/speech.mp3")
+	os.remove("temp/speech.mp3")
+
 def execute_start_command(words):
 	for key in scripts.keys():
 		if key in words:
@@ -52,9 +60,11 @@ def execute_time_command(words):
 		time_data = result.json()
 		# "datetime":"2020-04-20T16:02:15.687382+03:00"
 		current_time = datetime.strptime(time_data["datetime"][:10] + " " + time_data["datetime"][11:-13], "%Y-%m-%d %H:%M:%S")
+		speak("It's " + current_time.strftime("%H:%M %A %d of %B %Y") + " in " + time_data["timezone"])
 		print("It's ", current_time.strftime("%H:%M %A %d of %B %Y"), " in ", time_data["timezone"])
 	else:
 		current_time = datetime.now()
+		speak("It's " + current_time.strftime("%H:%M %A %d of %B %Y"))
 		print("It's ", current_time.strftime("%H:%M %A %d of %B %Y"))
 
 def execute_weather_command(words):
@@ -129,6 +139,7 @@ def main():
 			break
 		# TODO : refactor this condition
 		elif result["input"] == "goodbye" or result["input"] == "bye":
+			speak("See you later")
 			print("See you later")
 			break
 		else:
