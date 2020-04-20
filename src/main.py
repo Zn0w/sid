@@ -32,9 +32,10 @@ def process_speech(processor, input_device):
 	return result
 
 def execute_start_command(words):
-	for word in words.split(" "):
-		if scripts.get(word) != None:
-			os.system(scripts[word])
+	for key in scripts.keys():
+		if key in words:
+			for script_command in scripts[key].split(","):
+				os.system(script_command)
 			break
 
 def react(input):

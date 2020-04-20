@@ -1,1 +1,2 @@
 browser : D:\Opera\launcher.exe
+workspace one : start /d "D:\work\projects",start D:\work\projects
