@@ -57,6 +57,11 @@ def execute_time_command(words):
 		current_time = datetime.now()
 		print("It's ", current_time.strftime("%H:%M %A %d of %B %Y"))
 
+def execute_weather_command(words):
+	# for now no weather api, just a google search
+	url = "https://www.google.com/search?q={}".format(words)
+	webbrowser.open(url)
+
 def react(input):
 	for command in commands:
 		if command.match(input):
