@@ -5,7 +5,9 @@ class CommandType(Enum):
 	START = 1
 	POSITIVE = 2
 	NEGATIVE = 3
-	UNKNOWN = 4
+	SEARCH = 4
+	REMOTE = 5
+	UNKNOWN = 6
 
 class Command():
 	def __init__(self, type_str, vocab_str):
@@ -15,6 +17,8 @@ class Command():
 			self.type = CommandType.POSITIVE
 		elif type_str == "negative":
 			self.type = CommandType.NEGATIVE
+		elif type_str == "search":
+			self.type = CommandType.SEARCH
 		else:
 			self.type = CommandType.UNKNOWN
 		

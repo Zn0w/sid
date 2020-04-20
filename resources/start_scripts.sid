@@ -1,2 +1,2 @@
 browser : D:\Opera\launcher.exe
-workspace one : start /d "D:\work\projects",start D:\work\projects
+workspace one : D:\"Microsoft VS Code"\Code.exe,start D:\work\projects

@@ -1,3 +1,4 @@
 start : start,launch,open,run
 positive : yes,yeah,okay,fine
 negative : no,don't,later,cancel
+search : search,search for,what's,what is,what are

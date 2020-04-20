@@ -1,5 +1,6 @@
 import speech_recognition as sr
 import os
+import webbrowser
 
 import command as c
 
@@ -38,11 +39,18 @@ def execute_start_command(words):
 				os.system(script_command)
 			break
 
+def execute_search_command(words):
+	# TODO : get rid of the command part
+	url = "https://www.google.com/search?q={}".format(words)
+	webbrowser.open(url)
+
 def react(input):
 	for command in commands:
 		if command.match(input):
 			if command.type == c.CommandType.START:
 				execute_start_command(input)
+			elif command.type == c.CommandType.SEARCH:
+				execute_search_command(input)
 			break
 
 
