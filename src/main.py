@@ -1,6 +1,8 @@
 import speech_recognition as sr
 import os
 import webbrowser
+import requests
+from datetime import datetime
 
 import command as c
 
@@ -44,6 +46,17 @@ def execute_search_command(words):
 	url = "https://www.google.com/search?q={}".format(words)
 	webbrowser.open(url)
 
+def execute_time_command(words):
+	result = requests.get("http://worldtimeapi.org/api/ip")
+	if result.status_code == 200:
+		time_data = result.json()
+		# "datetime":"2020-04-20T16:02:15.687382+03:00"
+		current_time = datetime.strptime(time_data["datetime"][:10] + " " + time_data["datetime"][11:-13], "%Y-%m-%d %H:%M:%S")
+		print("It's ", current_time.strftime("%H:%M %A %d of %B %Y"), " in ", time_data["timezone"])
+	else:
+		current_time = datetime.now()
+		print("It's ", current_time.strftime("%H:%M %A %d of %B %Y"))
+
 def react(input):
 	for command in commands:
 		if command.match(input):
@@ -51,6 +64,10 @@ def react(input):
 				execute_start_command(input)
 			elif command.type == c.CommandType.SEARCH:
 				execute_search_command(input)
+			elif command.type == c.CommandType.TIME:
+				execute_time_command(input)
+			elif command.type == c.CommandType.WEATHER:
+				execute_weather_command(input)
 			break
 
 
