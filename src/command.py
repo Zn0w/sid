@@ -30,8 +30,14 @@ class Command():
 		self.vocabulary = vocab_str.split(",")
 	
 	def match(self, words):
-		for vocab_word in self.vocabulary:
-			if vocab_word in words:
-				return True
-		
-		return False
+		# special condition for search command, because the search query may contain words what trigger other commands
+		if self.type == CommandType.SEARCH:
+			for vocab_word in self.vocabulary:
+				if words.find(vocab_word) == 0:
+					return True
+			return False
+		else:
+			for vocab_word in self.vocabulary:
+				if vocab_word in words:
+					return True
+			return False

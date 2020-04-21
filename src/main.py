@@ -128,7 +128,7 @@ def main():
 	print("Speech recognition software version: " + sr.__version__)
 
 	r = sr.Recognizer()
-	mic = sr.Microphone(device_index = 1)
+	mic = sr.Microphone(device_index = 1) # if no device_index supplied, then default mic (i'm not using the default one atm)
 
 	while True:
 		result = process_speech(r, mic)
