@@ -50,8 +50,14 @@ def execute_start_command(words):
 			break
 
 def execute_search_command(words):
-	# TODO : get rid of the command part
-	url = "https://www.google.com/search?q={}".format(words)
+	query = "robot ai uprising"
+	for command in commands:
+		if command.type == c.CommandType.SEARCH: # get search command object from the global commands pool
+			for vocab_word in command.vocabulary:
+				if vocab_word in words:
+					query = words[len(vocab_word) + 1:] # substring with only query in it ('+ 1' for one space)
+					break
+	url = "https://www.google.com/search?q={}".format(query)
 	webbrowser.open(url)
 
 def execute_time_command(words):
