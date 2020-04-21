@@ -9,6 +9,7 @@ import random
 import sys
 
 import command as c
+import get_resources
 
 
 # TODO : deal with global variables
@@ -114,55 +115,15 @@ def react(input):
 
 
 def main():
-	#init random number generator
-	random.seed()
-	
-	# get vocabulary resources
-	
-	try:
-		file = open("resources/commands.sid", "r")
-		commands_raw = file.read()
-		file.close()
-	except IOError:
-		print("Couldn't read commands vocabulary file")
-		exit
-	
-	try:
-		file = open("resources/start_scripts.sid", "r")
-		scripts_raw = file.read()
-		file.close()
-	except IOError:
-		print("Couldn't read start_scripts file")
-		exit
-	
-	try:
-		file = open("resources/responses.sid", "r")
-		responses_raw = file.read()
-		file.close()
-	except IOError:
-		print("Couldn't read responses file")
-		exit
-	
-	# parse vocabulary resources
+	random.seed()	# init random number generator
 
-	print(commands_raw)	# DEBUG PRINT
-	print(scripts_raw)	# DEBUG PRINT
-	print(responses_raw) # DEBUG PRINT
-	
-	compound_commands = commands_raw.split("\n")
-	for compound_command in compound_commands:
-		command = compound_command.split(" : ")
-		commands.append(c.Command(command[0], command[1]))
-	
-	compound_scripts = scripts_raw.split("\n")
-	for compound_script in compound_scripts:
-		script = compound_script.split(" : ")
-		scripts.update({script[0] : script[1]})
-	
-	compound_responses = responses_raw.split("\n")
-	for compound_responses in compound_responses:
-		response = compound_responses.split(" : ")
-		responses.update({response[0] : response[1].split(",")})
+	global commands
+	global scripts
+	global responses
+
+	commands = get_resources.get_commands()
+	scripts = get_resources.get_scripts()
+	responses = get_resources.get_responses()
 
 	# DEBUG PRINT
 	for command in commands:
