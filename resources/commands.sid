@@ -1,6 +1,9 @@
-search : search,find,look up,look for
+search : search for,search,find,look up,look for
 start : start,launch,open,run
 positive : yes,yeah,okay,fine
 negative : no,don't,later,cancel
 time : time,date
 weather : weather,warm,cold,hot,chilly,rain,raining,sunny,cloudy,windy
+hello : hello,hey,what's up,what is up,good day,good morning,good afternoon,good evening,morning,afternoon,evening
+bye : bye,goodbye,good night
+thanks : thanks,thank you

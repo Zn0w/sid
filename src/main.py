@@ -5,6 +5,8 @@ import requests
 from datetime import datetime
 from gtts import gTTS
 import playsound
+import random
+import sys
 
 import command as c
 
@@ -12,6 +14,7 @@ import command as c
 # TODO : deal with global variables
 commands = []
 scripts = {}
+responses = {}
 
 
 def process_speech(processor, input_device):
@@ -43,6 +46,11 @@ def speak(text):
 	os.remove("temp/speech.mp3")
 
 def execute_start_command(words):
+	# occasionaly sid will give a response
+	# P = 0.5 * 0.5 * 0.5 = 0.125, i.e. the response will be given in 12.5% of the occurences
+	if (random.randint(0, 1) + random.randint(0, 1) + random.randint(0, 1)) == 3:
+		speak(responses["ok"][random.randint(0, len(responses["ok"]) - 1)])
+
 	for key in scripts.keys():
 		if key in words:
 			for script_command in scripts[key].split(","):
@@ -50,6 +58,7 @@ def execute_start_command(words):
 			break
 
 def execute_search_command(words):
+	speak("Opening in the browser")
 	query = "robot ai uprising"
 	for command in commands:
 		if command.type == c.CommandType.SEARCH: # get search command object from the global commands pool
@@ -75,8 +84,18 @@ def execute_time_command(words):
 
 def execute_weather_command(words):
 	# for now no weather api, just a google search
-	url = "https://www.google.com/search?q={}".format(words)
+	# TODO : evaluate the relative day (e.g. today, tomorrow) and location (e.g. london, chicago)
+	speak("Opening in the browser")
+	url = "https://www.google.com/search?q={}".format("weather")
 	webbrowser.open(url)
+
+def execute_chat_command(command):
+	# the first word in vocabulary (in commands.sid) corresponds to the name of the response type
+	response_type = responses[command.vocabulary[0]]
+	speak(response_type[random.randint(0, len(response_type) - 1)])
+
+	if command.type == c.CommandType.BYE:
+		sys.exit()
 
 def react(input):
 	for command in commands:
@@ -89,10 +108,15 @@ def react(input):
 				execute_time_command(input)
 			elif command.type == c.CommandType.WEATHER:
 				execute_weather_command(input)
+			elif command.type == c.CommandType.HELLO or command.type == c.CommandType.BYE or command.type == c.CommandType.THANKS:
+				execute_chat_command(command)
 			break
 
 
 def main():
+	#init random number generator
+	random.seed()
+	
 	# get vocabulary resources
 	
 	try:
@@ -111,10 +135,19 @@ def main():
 		print("Couldn't read start_scripts file")
 		exit
 	
+	try:
+		file = open("resources/responses.sid", "r")
+		responses_raw = file.read()
+		file.close()
+	except IOError:
+		print("Couldn't read responses file")
+		exit
+	
 	# parse vocabulary resources
 
 	print(commands_raw)	# DEBUG PRINT
 	print(scripts_raw)	# DEBUG PRINT
+	print(responses_raw) # DEBUG PRINT
 	
 	compound_commands = commands_raw.split("\n")
 	for compound_command in compound_commands:
@@ -125,11 +158,17 @@ def main():
 	for compound_script in compound_scripts:
 		script = compound_script.split(" : ")
 		scripts.update({script[0] : script[1]})
+	
+	compound_responses = responses_raw.split("\n")
+	for compound_responses in compound_responses:
+		response = compound_responses.split(" : ")
+		responses.update({response[0] : response[1].split(",")})
 
 	# DEBUG PRINT
 	for command in commands:
 		print(command.type.value, command.vocabulary)
 	print(scripts)	# DEBUG PRINT
+	print(responses)	# DEBUG PRINT
 
 	print("Speech recognition software version: " + sr.__version__)
 
@@ -141,12 +180,8 @@ def main():
 		if result["success"] and result["input"] == None:
 			print("Sorry, I did not hear you")
 		elif not result["success"]:
+			speak("I'm sorry but I cannot work properly due to a technical problem: " + result["input"] + ". Please contact tech support.")
 			print("Technical problems: " + result["input"])
-			break
-		# TODO : refactor this condition
-		elif result["input"] == "goodbye" or result["input"] == "bye":
-			speak("See you later")
-			print("See you later")
 			break
 		else:
 			print("You said: " + result["input"])
