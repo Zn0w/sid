@@ -16,6 +16,7 @@ import get_resources
 commands = []
 scripts = {}
 responses = {}
+active = True
 
 
 def process_speech(processor, input_device):
@@ -98,20 +99,38 @@ def execute_chat_command(command):
 	if command.type == c.CommandType.BYE:
 		sys.exit()
 
+def execute_sleep_command():
+	speak("Going to sleep")
+	global active
+	active = False
+
+def execute_wake_command():
+	speak("Yes sir")
+	global active
+	active = True
+
 def react(input):
-	for command in commands:
-		if command.match(input):
-			if command.type == c.CommandType.START:
-				execute_start_command(input)
-			elif command.type == c.CommandType.SEARCH:
-				execute_search_command(input)
-			elif command.type == c.CommandType.TIME:
-				execute_time_command(input)
-			elif command.type == c.CommandType.WEATHER:
-				execute_weather_command(input)
-			elif command.type == c.CommandType.HELLO or command.type == c.CommandType.BYE or command.type == c.CommandType.THANKS:
-				execute_chat_command(command)
-			break
+	if active:
+		for command in commands:
+			if command.match(input):
+				if command.type == c.CommandType.START:
+					execute_start_command(input)
+				elif command.type == c.CommandType.SEARCH:
+					execute_search_command(input)
+				elif command.type == c.CommandType.TIME:
+					execute_time_command(input)
+				elif command.type == c.CommandType.WEATHER:
+					execute_weather_command(input)
+				elif command.type == c.CommandType.HELLO or command.type == c.CommandType.BYE or command.type == c.CommandType.THANKS:
+					execute_chat_command(command)
+				elif command.type == c.CommandType.SLEEP:
+					execute_sleep_command()
+				break
+	else:
+		for command in commands:
+			if command.type == c.CommandType.WAKE and command.match(input):
+				execute_wake_command()
+				break
 
 
 def main():

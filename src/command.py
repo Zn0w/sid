@@ -11,7 +11,9 @@ class CommandType(Enum):
 	HELLO = 7
 	BYE = 8
 	THANKS = 9
-	UNKNOWN = 10
+	SLEEP = 10
+	WAKE = 11
+	UNKNOWN = 12
 
 class Command():
 	def __init__(self, type_str, vocab_str):
@@ -33,6 +35,10 @@ class Command():
 			self.type = CommandType.BYE
 		elif type_str == "thanks":
 			self.type = CommandType.THANKS
+		elif type_str == "sleep":
+			self.type = CommandType.SLEEP
+		elif type_str == "wake":
+			self.type = CommandType.WAKE
 		else:
 			self.type = CommandType.UNKNOWN
 		

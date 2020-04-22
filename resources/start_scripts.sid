@@ -1,2 +1,3 @@
 browser : D:\Opera\launcher.exe
 workspace one : D:\"Microsoft VS Code"\Code.exe,start D:\work\projects
+terminal : %SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe

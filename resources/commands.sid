@@ -5,5 +5,7 @@ negative : no,don't,later,cancel
 time : time,date
 weather : weather,warm,cold,hot,chilly,rain,raining,sunny,cloudy,windy
 hello : hello,hey,what's up,what is up,good day,good morning,good afternoon,good evening,morning,afternoon,evening
-bye : bye,goodbye,good night
+bye : bye,goodbye,good night,shut down
 thanks : thanks,thank you
+sleep : sleep
+wake : wake up,Sid
